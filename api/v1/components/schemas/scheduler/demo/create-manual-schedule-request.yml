@@ -1,0 +1,36 @@
+type: object
+required:
+  - type
+properties:
+  type:
+    type: string
+    enum:
+      - once
+      - interval
+      - cron
+    example: cron
+
+  executionTime:
+    type: string
+    format: date-time
+    example: "2026-09-25T22:00:00Z"
+
+  startTime:
+    type: string
+    format: date-time
+    example: "2026-09-25T22:00:00Z"
+
+  intervalSeconds:
+    type: integer
+    format: int64
+    minimum: 1
+    example: 60
+
+  expression:
+    type: string
+    example: "0 0/10 * * * ?"
+
+  input:
+    type: string
+    nullable: true
+    example: "test"

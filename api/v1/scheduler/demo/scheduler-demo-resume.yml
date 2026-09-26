@@ -1,0 +1,22 @@
+post:
+  tags: [scheduler-demo]
+  operationId: resumeSchedule
+  summary: Resume a schedule
+
+  parameters:
+    - name: scheduleId
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    '204':
+      description: Schedule resumed successfully
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'

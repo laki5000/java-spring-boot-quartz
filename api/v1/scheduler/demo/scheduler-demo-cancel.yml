@@ -1,0 +1,22 @@
+delete:
+  tags: [scheduler-demo]
+  operationId: cancelSchedule
+  summary: Cancel a schedule
+
+  parameters:
+    - name: scheduleId
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    '204':
+      description: Schedule cancelled successfully
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'

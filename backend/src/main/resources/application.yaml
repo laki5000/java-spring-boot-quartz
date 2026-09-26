@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: com.example.core
+  quartz:
+    job-store-type: memory
+
+logging:
+  level:
+    com.example.core: DEBUG
+
+scheduler:
+  provider: quartz

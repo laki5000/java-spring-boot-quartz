@@ -1,0 +1,50 @@
+post:
+  tags: [scheduler-demo]
+  operationId: createManualSchedule
+  summary: Create a manual task schedule
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/scheduler/demo/create-manual-schedule-request.yml'
+  responses:
+    '200':
+      description: Schedule created successfully
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-response-string.yml'
+
+    '400':
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'
+
+get:
+  tags: [scheduler-demo]
+  operationId: getSchedules
+  summary: Get all schedules
+  responses:
+    '200':
+      description: All schedules
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/scheduler/demo/api-response-get-schedules-dto-list.yml'
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'

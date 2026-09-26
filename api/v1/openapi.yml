@@ -1,0 +1,27 @@
+openapi: 3.0.3
+
+info:
+  title: Demo
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /api/v1/demo:
+    $ref: './demo/demo.yml'
+
+  /api/v1/scheduler/demo:
+    $ref: './scheduler/demo/scheduler-demo.yml'
+
+  /api/v1/scheduler/demo/{scheduleId}:
+    $ref: './scheduler/demo/scheduler-demo-cancel.yml'
+
+  /api/v1/scheduler/demo/{scheduleId}/pause:
+    $ref: './scheduler/demo/scheduler-demo-pause.yml'
+
+  /api/v1/scheduler/demo/{scheduleId}/resume:
+    $ref: './scheduler/demo/scheduler-demo-resume.yml'
+
+  /api/v1/scheduler/demo/{scheduleId}/trigger:
+    $ref: './scheduler/demo/scheduler-demo-trigger.yml'

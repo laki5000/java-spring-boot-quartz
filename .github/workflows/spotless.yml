@@ -1,0 +1,23 @@
+name: Spotless
+
+on:
+  workflow_call:
+
+jobs:
+  spotless:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          java-version: '25'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: Run Spotless
+        working-directory: backend
+        run: mvn spotless:check

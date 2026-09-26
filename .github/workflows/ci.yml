@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+
+  spotless:
+    uses: ./.github/workflows/spotless.yml
+
+  unit-tests:
+    needs: build
+    uses: ./.github/workflows/unit-tests.yml
+
+  integration-tests:
+    needs: build
+    uses: ./.github/workflows/integration-tests.yml
+
+  coverage:
+    needs:
+      - unit-tests
+      - integration-tests
+    uses: ./.github/workflows/coverage.yml

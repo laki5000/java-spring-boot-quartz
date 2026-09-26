@@ -1,0 +1,22 @@
+post:
+  tags: [scheduler-demo]
+  operationId: triggerSchedule
+  summary: Trigger a schedule immediately
+
+  parameters:
+    - name: scheduleId
+      in: path
+      required: true
+      schema:
+        type: string
+
+  responses:
+    '204':
+      description: Schedule triggered successfully
+
+    '500':
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/api-error-response.yml'

@@ -1,0 +1,21 @@
+type: object
+
+properties:
+  id:
+    type: string
+  type:
+    type: string
+    enum:
+      - once
+      - interval
+      - cron
+    example: interval
+  status:
+    type: string
+    enum:
+      - scheduled
+      - paused
+      - blocked
+      - complete
+      - error
+    example: scheduled
