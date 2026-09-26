@@ -1,5 +1,6 @@
 package com.example.proj.exception;
 
+import com.example.core.exception.ValidationException;
 import com.example.core.message.I18nService;
 import com.example.generated.dto.ApiErrorResponse;
 import jakarta.validation.ConstraintViolationException;
@@ -33,7 +34,8 @@ public class GlobalExceptionHandler {
     MethodArgumentNotValidException.class,
     HandlerMethodValidationException.class,
     ConstraintViolationException.class,
-    HttpMessageNotReadableException.class
+    HttpMessageNotReadableException.class,
+    ValidationException.class
   })
   public ResponseEntity<ApiErrorResponse> handleBadRequest(Exception exception) {
     log.warn("Bad request", exception);

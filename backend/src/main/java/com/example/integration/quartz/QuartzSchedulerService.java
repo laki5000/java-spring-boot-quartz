@@ -3,8 +3,8 @@ package com.example.integration.quartz;
 import com.example.core.exception.SchedulerException;
 import com.example.core.logging.LogExecution;
 import com.example.core.scheduler.ISchedule;
-import com.example.core.scheduler.ScheduledTask;
 import com.example.core.scheduler.ISchedulerService;
+import com.example.core.scheduler.ScheduledTask;
 import com.example.core.scheduler.SchedulerTaskInput;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +21,7 @@ public class QuartzSchedulerService implements ISchedulerService {
   @LogExecution(logArguments = true)
   @Override
   public void schedule(
-          String scheduleId, String taskId, ISchedule schedule, SchedulerTaskInput input) {
+      String scheduleId, String taskId, ISchedule schedule, SchedulerTaskInput input) {
     try {
       JobDetail job =
           JobBuilder.newJob(QuartzJob.class)

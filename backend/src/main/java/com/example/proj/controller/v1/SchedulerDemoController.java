@@ -17,16 +17,16 @@ public class SchedulerDemoController implements SchedulerDemoApi {
 
   @Override
   public ResponseEntity<ApiResponseString> createManualSchedule(
-          CreateManualScheduleRequest request) {
+      CreateManualScheduleRequest request) {
 
     return ResponseEntity.ok(
-            new ApiResponseString().data(schedulerDemoService.createManualSchedule(request)));
+        new ApiResponseString().data(schedulerDemoService.createManualSchedule(request)));
   }
 
   @Override
   public ResponseEntity<ApiResponseGetSchedulesDtoList> getSchedules() {
     return ResponseEntity.ok(
-            new ApiResponseGetSchedulesDtoList().data(schedulerDemoService.getSchedules()));
+        new ApiResponseGetSchedulesDtoList().data(schedulerDemoService.getSchedules()));
   }
 
   @Override
