@@ -2,9 +2,9 @@ package com.example.integration.quartz;
 
 import com.example.core.exception.SchedulerException;
 import com.example.core.logging.LogExecution;
-import com.example.core.scheduler.Schedule;
+import com.example.core.scheduler.ISchedule;
 import com.example.core.scheduler.ScheduledTask;
-import com.example.core.scheduler.SchedulerPort;
+import com.example.core.scheduler.ISchedulerService;
 import com.example.core.scheduler.SchedulerTaskInput;
 import java.util.Date;
 import java.util.List;
@@ -14,14 +14,14 @@ import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 
 @RequiredArgsConstructor
-public class QuartzSchedulerAdapter implements SchedulerPort {
+public class QuartzSchedulerService implements ISchedulerService {
 
   private final Scheduler quartzScheduler;
 
   @LogExecution(logArguments = true)
   @Override
   public void schedule(
-      String scheduleId, String taskId, Schedule schedule, SchedulerTaskInput input) {
+          String scheduleId, String taskId, ISchedule schedule, SchedulerTaskInput input) {
     try {
       JobDetail job =
           JobBuilder.newJob(QuartzJob.class)
@@ -95,13 +95,13 @@ public class QuartzSchedulerAdapter implements SchedulerPort {
     }
   }
 
-  private Trigger createTrigger(String scheduleId, Schedule schedule) {
+  private Trigger createTrigger(String scheduleId, ISchedule schedule) {
     TriggerBuilder<Trigger> triggerBuilder = TriggerBuilder.newTrigger().withIdentity(scheduleId);
 
     return switch (schedule) {
-      case Schedule.Once once -> triggerBuilder.startAt(Date.from(once.executionTime())).build();
+      case ISchedule.Once once -> triggerBuilder.startAt(Date.from(once.executionTime())).build();
 
-      case Schedule.Interval interval ->
+      case ISchedule.Interval interval ->
           triggerBuilder
               .startAt(Date.from(interval.startTime()))
               .withSchedule(
@@ -110,7 +110,7 @@ public class QuartzSchedulerAdapter implements SchedulerPort {
                       .repeatForever())
               .build();
 
-      case Schedule.Cron cron ->
+      case ISchedule.Cron cron ->
           triggerBuilder.withSchedule(CronScheduleBuilder.cronSchedule(cron.expression())).build();
     };
   }

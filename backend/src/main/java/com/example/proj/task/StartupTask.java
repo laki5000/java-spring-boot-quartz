@@ -1,7 +1,7 @@
 package com.example.proj.task;
 
 import com.example.core.logging.LogExecution;
-import com.example.core.scheduler.SchedulerTask;
+import com.example.core.scheduler.ISchedulerTask;
 import com.example.core.scheduler.SchedulerTaskInput;
 import com.example.proj.constant.SchedulerConstants;
 import lombok.extern.slf4j.Slf4j;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component(SchedulerConstants.STARTUP_TASK_ID)
 @Slf4j
-public class StartupTask implements SchedulerTask {
+public class StartupTask implements ISchedulerTask {
 
   @LogExecution(level = Level.INFO, logArguments = true)
   @Override

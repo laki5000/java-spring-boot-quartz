@@ -1,6 +1,6 @@
 package com.example.integration.quartz;
 
-import com.example.core.scheduler.SchedulerTask;
+import com.example.core.scheduler.ISchedulerTask;
 import com.example.core.scheduler.SchedulerTaskInput;
 import lombok.RequiredArgsConstructor;
 import org.quartz.Job;
@@ -19,7 +19,7 @@ public class QuartzJob implements Job {
     SchedulerTaskInput input =
         (SchedulerTaskInput) context.getMergedJobDataMap().get(QuartzConstants.TASK_INPUT_KEY);
 
-    SchedulerTask task = applicationContext.getBean(taskId, SchedulerTask.class);
+    ISchedulerTask task = applicationContext.getBean(taskId, ISchedulerTask.class);
 
     task.execute(input);
   }

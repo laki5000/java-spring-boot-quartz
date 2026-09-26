@@ -1,7 +1,7 @@
 package com.example.proj;
 
-import com.example.core.scheduler.Schedule;
-import com.example.core.scheduler.SchedulerPort;
+import com.example.core.scheduler.ISchedule;
+import com.example.core.scheduler.ISchedulerService;
 import com.example.core.scheduler.SchedulerTaskInput;
 import com.example.proj.constant.SchedulerConstants;
 import java.time.Duration;
@@ -16,16 +16,16 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class SchedulerInitializer implements ApplicationRunner {
 
-  private final SchedulerPort schedulerPort;
+  private final ISchedulerService schedulerService;
 
   @Override
   public void run(@NonNull ApplicationArguments args) {
     SchedulerTaskInput input = new SchedulerTaskInput(SchedulerConstants.STARTUP_TASK_INPUT);
 
-    schedulerPort.schedule(
+    schedulerService.schedule(
         SchedulerConstants.STARTUP_SCHEDULE_ID,
         SchedulerConstants.STARTUP_TASK_ID,
-        Schedule.interval(
+        ISchedule.interval(
             Instant.now(), Duration.ofSeconds(SchedulerConstants.STARTUP_INTERVAL_SECONDS)),
         input);
   }

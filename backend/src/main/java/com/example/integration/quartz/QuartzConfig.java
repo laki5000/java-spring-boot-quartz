@@ -1,6 +1,6 @@
 package com.example.integration.quartz;
 
-import com.example.core.scheduler.SchedulerPort;
+import com.example.core.scheduler.ISchedulerService;
 import org.quartz.Scheduler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.quartz.autoconfigure.SchedulerFactoryBeanCustomizer;
@@ -14,8 +14,8 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 public class QuartzConfig {
 
   @Bean
-  public SchedulerPort scheduler(Scheduler quartzScheduler) {
-    return new QuartzSchedulerAdapter(quartzScheduler);
+  public ISchedulerService scheduler(Scheduler quartzScheduler) {
+    return new QuartzSchedulerService(quartzScheduler);
   }
 
   @Bean

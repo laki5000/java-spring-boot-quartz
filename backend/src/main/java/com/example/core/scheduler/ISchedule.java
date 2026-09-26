@@ -4,9 +4,9 @@ import com.example.core.exception.ValidationException;
 import java.time.Duration;
 import java.time.Instant;
 
-public sealed interface Schedule permits Schedule.Once, Schedule.Interval, Schedule.Cron {
+public sealed interface ISchedule permits ISchedule.Once, ISchedule.Interval, ISchedule.Cron {
 
-  record Once(Instant executionTime) implements Schedule {
+  record Once(Instant executionTime) implements ISchedule {
 
     public Once {
       if (executionTime == null) {
@@ -15,7 +15,7 @@ public sealed interface Schedule permits Schedule.Once, Schedule.Interval, Sched
     }
   }
 
-  record Interval(Instant startTime, Duration interval) implements Schedule {
+  record Interval(Instant startTime, Duration interval) implements ISchedule {
 
     public Interval {
       if (startTime == null) {
@@ -32,7 +32,7 @@ public sealed interface Schedule permits Schedule.Once, Schedule.Interval, Sched
     }
   }
 
-  record Cron(String expression) implements Schedule {
+  record Cron(String expression) implements ISchedule {
 
     public Cron {
       if (expression == null) {
@@ -45,15 +45,15 @@ public sealed interface Schedule permits Schedule.Once, Schedule.Interval, Sched
     }
   }
 
-  static Schedule onceAt(Instant executionTime) {
+  static ISchedule onceAt(Instant executionTime) {
     return new Once(executionTime);
   }
 
-  static Schedule interval(Instant startTime, Duration interval) {
+  static ISchedule interval(Instant startTime, Duration interval) {
     return new Interval(startTime, interval);
   }
 
-  static Schedule cron(String expression) {
+  static ISchedule cron(String expression) {
     return new Cron(expression);
   }
 }

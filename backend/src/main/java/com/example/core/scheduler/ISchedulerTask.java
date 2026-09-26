@@ -1,7 +1,7 @@
 package com.example.core.scheduler;
 
 @FunctionalInterface
-public interface SchedulerTask {
+public interface ISchedulerTask {
 
   void execute(SchedulerTaskInput input);
 }
