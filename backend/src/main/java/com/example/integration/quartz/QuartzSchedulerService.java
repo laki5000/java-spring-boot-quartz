@@ -12,17 +12,21 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import tools.jackson.databind.ObjectMapper;
 
 @RequiredArgsConstructor
 public class QuartzSchedulerService implements ISchedulerService {
 
   private final Scheduler quartzScheduler;
+  private final ObjectMapper objectMapper;
 
   @LogExecution(logArguments = true)
   @Override
   public void schedule(
       String scheduleId, String taskId, ISchedule schedule, SchedulerTaskInput input) {
     try {
+      String inputJson = objectMapper.writeValueAsString(input);
+
       JobDetail job =
           JobBuilder.newJob(QuartzJob.class)
               .withIdentity(scheduleId)
@@ -32,7 +36,7 @@ public class QuartzSchedulerService implements ISchedulerService {
                           QuartzConstants.TASK_ID_KEY,
                           taskId,
                           QuartzConstants.TASK_INPUT_KEY,
-                          input)))
+                          inputJson)))
               .build();
 
       Trigger trigger = createTrigger(scheduleId, schedule);

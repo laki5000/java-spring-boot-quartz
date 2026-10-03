@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.example.core.exception.SchedulerException;
 import com.example.core.scheduler.ISchedule;
@@ -32,6 +34,7 @@ import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.matchers.GroupMatcher;
+import tools.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
 class QuartzSchedulerServiceUnitTests {
@@ -39,18 +42,20 @@ class QuartzSchedulerServiceUnitTests {
   private static final String SCHEDULE_ID = "test-schedule";
   private static final String TASK_ID = "test-task";
   private static final String INPUT_VALUE = "test-input";
+  private static final String INPUT_JSON = "{\"value\":\"test-input\"}";
   private static final Instant EXECUTION_TIME = Instant.parse("2030-09-26T14:00:00Z");
   private static final Instant START_TIME = Instant.parse("2030-09-26T14:00:00Z");
   private static final Duration INTERVAL = Duration.ofSeconds(10);
   private static final String CRON_EXPRESSION = "0/10 * * * * ?";
 
   @Mock private Scheduler quartzScheduler;
+  @Mock private ObjectMapper objectMapper;
 
   private QuartzSchedulerService quartzSchedulerService;
 
   @BeforeEach
   void setUp() {
-    quartzSchedulerService = new QuartzSchedulerService(quartzScheduler);
+    quartzSchedulerService = new QuartzSchedulerService(quartzScheduler, objectMapper);
   }
 
   @Test
@@ -59,6 +64,8 @@ class QuartzSchedulerServiceUnitTests {
     ISchedule schedule = ISchedule.onceAt(EXECUTION_TIME);
     SchedulerTaskInput input = new SchedulerTaskInput(INPUT_VALUE);
 
+    when(objectMapper.writeValueAsString(input)).thenReturn(INPUT_JSON);
+
     ArgumentCaptor<JobDetail> jobCaptor = ArgumentCaptor.forClass(JobDetail.class);
     ArgumentCaptor<Trigger> triggerCaptor = ArgumentCaptor.forClass(Trigger.class);
 
@@ -66,6 +73,7 @@ class QuartzSchedulerServiceUnitTests {
     quartzSchedulerService.schedule(SCHEDULE_ID, TASK_ID, schedule, input);
 
     // Then
+    verify(objectMapper).writeValueAsString(input);
     verify(quartzScheduler).scheduleJob(jobCaptor.capture(), triggerCaptor.capture());
 
     JobDetail job = jobCaptor.getValue();
@@ -73,7 +81,7 @@ class QuartzSchedulerServiceUnitTests {
 
     assertEquals(SCHEDULE_ID, job.getKey().getName());
     assertEquals(TASK_ID, job.getJobDataMap().getString(QuartzConstants.TASK_ID_KEY));
-    assertEquals(input, job.getJobDataMap().get(QuartzConstants.TASK_INPUT_KEY));
+    assertEquals(INPUT_JSON, job.getJobDataMap().getString(QuartzConstants.TASK_INPUT_KEY));
 
     SimpleTrigger simpleTrigger = assertInstanceOf(SimpleTrigger.class, trigger);
 
@@ -88,12 +96,15 @@ class QuartzSchedulerServiceUnitTests {
     ISchedule schedule = ISchedule.interval(START_TIME, INTERVAL);
     SchedulerTaskInput input = new SchedulerTaskInput(INPUT_VALUE);
 
+    when(objectMapper.writeValueAsString(input)).thenReturn(INPUT_JSON);
+
     ArgumentCaptor<Trigger> triggerCaptor = ArgumentCaptor.forClass(Trigger.class);
 
     // When
     quartzSchedulerService.schedule(SCHEDULE_ID, TASK_ID, schedule, input);
 
     // Then
+    verify(objectMapper).writeValueAsString(input);
     verify(quartzScheduler).scheduleJob(any(JobDetail.class), triggerCaptor.capture());
 
     SimpleTrigger trigger = assertInstanceOf(SimpleTrigger.class, triggerCaptor.getValue());
@@ -110,12 +121,15 @@ class QuartzSchedulerServiceUnitTests {
     ISchedule schedule = ISchedule.cron(CRON_EXPRESSION);
     SchedulerTaskInput input = new SchedulerTaskInput(INPUT_VALUE);
 
+    when(objectMapper.writeValueAsString(input)).thenReturn(INPUT_JSON);
+
     ArgumentCaptor<Trigger> triggerCaptor = ArgumentCaptor.forClass(Trigger.class);
 
     // When
     quartzSchedulerService.schedule(SCHEDULE_ID, TASK_ID, schedule, input);
 
     // Then
+    verify(objectMapper).writeValueAsString(input);
     verify(quartzScheduler).scheduleJob(any(JobDetail.class), triggerCaptor.capture());
 
     CronTrigger trigger = assertInstanceOf(CronTrigger.class, triggerCaptor.getValue());
@@ -130,6 +144,8 @@ class QuartzSchedulerServiceUnitTests {
     ISchedule schedule = ISchedule.onceAt(EXECUTION_TIME);
     SchedulerTaskInput input = new SchedulerTaskInput(INPUT_VALUE);
     org.quartz.SchedulerException quartzException = new org.quartz.SchedulerException();
+
+    when(objectMapper.writeValueAsString(input)).thenReturn(INPUT_JSON);
 
     when(quartzScheduler.scheduleJob(any(JobDetail.class), any(Trigger.class)))
         .thenThrow(quartzException);

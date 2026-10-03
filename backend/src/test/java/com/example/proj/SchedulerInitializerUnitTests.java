@@ -55,6 +55,6 @@ class SchedulerInitializerUnitTests {
 
     assertEquals(SchedulerConstants.STARTUP_INTERVAL_SECONDS, schedule.interval().toSeconds());
 
-    assertEquals(SchedulerConstants.STARTUP_TASK_INPUT, inputCaptor.getValue().as(String.class));
+    assertEquals(SchedulerConstants.STARTUP_TASK_INPUT, inputCaptor.getValue().value());
   }
 }

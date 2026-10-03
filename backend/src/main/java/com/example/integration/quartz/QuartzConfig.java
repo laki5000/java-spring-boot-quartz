@@ -8,14 +8,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
+import tools.jackson.databind.ObjectMapper;
 
 @Configuration
 @ConditionalOnProperty(prefix = "scheduler", name = "provider", havingValue = "quartz")
 public class QuartzConfig {
 
   @Bean
-  public ISchedulerService scheduler(Scheduler quartzScheduler) {
-    return new QuartzSchedulerService(quartzScheduler);
+  public ISchedulerService scheduler(Scheduler quartzScheduler, ObjectMapper objectMapper) {
+    return new QuartzSchedulerService(quartzScheduler, objectMapper);
   }
 
   @Bean

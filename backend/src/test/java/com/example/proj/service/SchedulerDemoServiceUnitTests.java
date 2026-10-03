@@ -78,7 +78,7 @@ class SchedulerDemoServiceUnitTests {
     ISchedule.Once schedule = assertInstanceOf(ISchedule.Once.class, scheduleCaptor.getValue());
 
     assertEquals(EXECUTION_TIME.toInstant(), schedule.executionTime());
-    assertEquals(INPUT_VALUE, inputCaptor.getValue().as(String.class));
+    assertEquals(INPUT_VALUE, inputCaptor.getValue().value());
   }
 
   @Test
